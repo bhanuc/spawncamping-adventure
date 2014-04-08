@@ -1,7 +1,8 @@
 #!/bin/env node
-// OpenShift sample Node application var express = require('express'); var fs = require('fs'); /**
- * Define the sample application.
- */ var SampleApp = function() {
+// OpenShift sample Node application 
+var express = require('express');
+ var fs = require('fs'); 
+  var SampleApp = function() {
     // Scope.
     var self = this;
     /* ================================================================ */
@@ -29,7 +30,7 @@
             self.zcache = { 'index.html': '' };
         }
         // Local cache for static content.
-        self.zcache['index.html'] = fs.readFileSync('./index.html');
+        self.zcache['/public/index.html'] = fs.readFileSync('./public/index.html');
     };
     /**
      * Retrieve entry (content) from cache.
@@ -93,7 +94,7 @@
         };
         self.routes['/'] = function(req, res) {
             res.set('Content-Type', 'text/html');
-            res.send(self.cache_get('index.html') );
+            res.send(self.cache_get('/public/index.html') );
         };
     };
     /**
@@ -123,13 +124,13 @@
      */
     self.start = function() {
         // Start the app on the specific interface (and port).
-        self.app.use(express.static(__dirname + '/public', { maxAge: oneDay }));
+        self.app.use(express.static(__dirname + '/public'));
 	self.app.listen(self.port, self.ipaddress, function() {
             console.log('%s: Node server started on %s:%d ...',
                         Date(Date.now() ), self.ipaddress, self.port);
         });
     };
-}; /* Sample Application.  */
+}; 
 /**
  * main(): Main code.
  */ var zapp = new SampleApp(); zapp.initialize(); zapp.start();
